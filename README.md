@@ -2,6 +2,24 @@
 
 Used as the rasterization engine for the paper "3D Gaussian Splatting for Real-Time Rendering of Radiance Fields". If you can make use of it in your own research, please be so kind to cite us.
 
+# Install:
+```
+git clone https://github.com/coder-bryan-123/diff-gaussian-rasterization.git
+git submodule init
+git submodule sync --recursive
+cd diff-gaussian-rasterization
+pip insatll -e .
+
+# or
+git clone --recursive https://github.com/coder-bryan-123/diff-gaussian-rasterization.git
+cd diff-gaussian-rasterization
+pip insatll -e .
+```
+# Usage:
+```
+python tests/forward.py
+```
+
 <section class="section" id="BibTeX">
   <div class="container is-max-desktop content">
     <h2 class="title">BibTeX</h2>
