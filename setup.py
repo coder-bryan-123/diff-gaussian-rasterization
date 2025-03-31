@@ -34,9 +34,10 @@ setup(
             "hip_rasterizer/backward.hip",
             "rasterize_points.hip",
             "ext.cpp"],
-            extra_compile_args={"nvcc":[], "cxx":["-I"+glm_include_dir]})
+            extra_compile_args={"nvcc":["-I"+glm_include_dir], "cxx":["-I"+glm_include_dir]})
         ],
     cmdclass={
         'build_ext': BuildExtension.with_options(use_hip=True)
-    }
+    },
+    version='1.0.0'
 )
