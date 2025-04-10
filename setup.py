@@ -17,9 +17,15 @@ current_dir = os.path.dirname(os.path.abspath(__file__))
 # Include this line immediately after the import statements
 TORCH_MAJOR = int(torch.__version__.split('.')[0])
 TORCH_MINOR = int(torch.__version__.split('.')[1])
-is_rocm_pytorch = False
+is_rocm = False
 if TORCH_MAJOR > 1 or (TORCH_MAJOR == 1 and TORCH_MINOR >= 5):
-  is_rocm_pytorch = True if ((torch.version.hip is not None) and (ROCM_HOME is not None)) else False
+  is_rocm = True if ((torch.version.hip is not None) and (ROCM_HOME is not None)) else False
+
+def get_sources():
+  if is_rocm:
+    return ["hip_rasterizer/rasterizer_impl.hip", "hip_rasterizer/forward.hip", "hip_rasterizer/backward.hip", "rasterize_points.hip", "ext.cpp"]
+  else:
+    return ["cuda_rasterizer/rasterizer_impl.cu", "cuda_rasterizer/forward.cu", "cuda_rasterizer/backward.cu", "rasterize_points.cu", "ext.cpp"]
   
 glm_include_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "third_party/glm/")
 setup(
@@ -28,16 +34,11 @@ setup(
     ext_modules=[
         CUDAExtension(
             name="diff_gaussian_rasterization._C",
-            sources=[
-            "hip_rasterizer/rasterizer_impl.hip",
-            "hip_rasterizer/forward.hip",
-            "hip_rasterizer/backward.hip",
-            "rasterize_points.hip",
-            "ext.cpp"],
+            sources=get_sources(),
             extra_compile_args={"nvcc":["-I"+glm_include_dir], "cxx":["-I"+glm_include_dir]})
         ],
     cmdclass={
-        'build_ext': BuildExtension.with_options(use_hip=True)
+        'build_ext': BuildExtension
     },
     version='1.0.0'
 )
