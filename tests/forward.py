@@ -48,3 +48,6 @@ image = rasterizer(
 
 # output image shape [C, H, W]
 print(image[0].shape)# torch.Size([3, 512, 512])
+
+# backward?
+# image.backward()
