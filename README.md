@@ -5,8 +5,7 @@ Used as the rasterization engine for the paper "3D Gaussian Splatting for Real-T
 ## Install:
 ```
 git clone https://github.com/coder-bryan-123/diff-gaussian-rasterization.git
-git submodule init
-git submodule sync --recursive
+git submodule update --init --recursive
 cd diff-gaussian-rasterization
 pip insatll -e .
 
