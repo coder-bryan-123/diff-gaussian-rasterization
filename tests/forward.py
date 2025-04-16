@@ -7,6 +7,7 @@ device = "cuda"
 num_points = 1000
 
 # generate random gaussian parameters
+torch.manual_seed(42)
 means3D = torch.randn((num_points, 3), dtype=torch.float, device=device)  # [N, 3]
 colors = torch.rand((num_points, 3), dtype=torch.float, device=device)    # [N, 3] RGB in [0,1]
 opacities = torch.sigmoid(torch.randn((num_points, 1), dtype=torch.float, device=device))  # [N, 1]
@@ -35,19 +36,21 @@ raster_settings = GaussianRasterizationSettings(
 
 # create rasterizer
 rasterizer = GaussianRasterizer(raster_settings=raster_settings)
-image = rasterizer(
+color, radii = rasterizer(
     means3D=means3D,
-    means2D=None,
-    shs=None,
-    opacities=opacities,
-    colors_precomp=colors,
-    scales=scales,
-    rotations=rotations,
+    means2D=None, # not used
+    shs=None, # as raster_settings.sh_degree = 0, no Spherical Harmonics will affect the final render result
+    opacities=opacities, # opacity for render if cover or not cover
+    colors_precomp=colors, # set the color to avoid SH calculate
+    scales=scales, # scale factor to control Conv3D gaussian
+    rotations=rotations, # rotation for 3D=>2D
     cov3D_precomp=None
 )
 
-# output image shape [C, H, W]
-print(image[0].shape)# torch.Size([3, 512, 512])
+# the final pixel RGB [C, H, W]
+print(color.shape)# torch.Size([3, 512, 512])
+print(color)
 
-# backward?
-# image.backward()
+# the gaussians 2D projection radius [N]
+print(radii.shape)
+print(radii)

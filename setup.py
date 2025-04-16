@@ -8,10 +8,10 @@
 #
 # For inquiries contact  george.drettakis@inria.fr
 #
-import torch
 from setuptools import setup
 from torch.utils.cpp_extension import CUDAExtension, BuildExtension, ROCM_HOME
 import os
+import torch
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
 # Include this line immediately after the import statements
